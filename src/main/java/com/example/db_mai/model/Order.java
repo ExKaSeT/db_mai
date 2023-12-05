@@ -13,8 +13,8 @@ import java.util.List;
 @Data
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq")
-    @SequenceGenerator(name = "order_seq", sequenceName = "order_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_seq")
+    @SequenceGenerator(name = "order_id_seq", sequenceName = "order_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "order_date")

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2023-12-05-init-db" author="anon">
+
+      <sql>
+
+          CREATE TABLE IF NOT EXISTS components
+          (
+              id       SERIAL PRIMARY KEY,
+              sku      VARCHAR(255),
+              model    VARCHAR(255),
+              quantity INT,
+              price    DECIMAL(10, 2)
+              );
+          INSERT INTO components (sku, model, quantity, price)
+          VALUES ('CPU123', 'Intel Core i7-10700K', 50, 300.00),
+                 ('GPU456', 'NVIDIA GeForce RTX 3080', 30, 700.00),
+                 ('RAM789', 'Corsair Vengeance 16GB', 100, 80.00),
+                 ('HDD101', 'Seagate Barracuda 2TB', 40, 60.00),
+                 ('SSD202', 'Samsung 970 EVO 1TB', 25, 150.00),
+                 ('MBD303', 'ASUS ROG Strix B450-F', 60, 120.00),
+                 ('PWR404', 'EVGA 850W Power Supply', 45, 100.00),
+                 ('CS1005', 'NZXT H510i Case', 55, 90.00),
+                 ('KYB606', 'Logitech G Pro Mechanical Keyboard', 70, 120.00),
+                 ('MS707', 'Logitech G Pro Wireless Mouse', 80, 70.00);
+
+          CREATE TABLE IF NOT EXISTS assemblers
+          (
+              id     SERIAL PRIMARY KEY,
+              name   VARCHAR(255),
+              salary DECIMAL(10, 2),
+              hire_date DATE,
+              weekly_hours INT
+              );
+          INSERT INTO assemblers (name, salary, hire_date, weekly_hours)
+          VALUES ('John Doe', 2500.00, '2023-10-16', 40),
+                 ('Jane Smith', 2800.50, '2023-10-17', 38),
+                 ('Bob Johnson', 2600.75, '2023-10-18', 42),
+                 ('Mary Davis', 2700.12, '2023-10-19', 39),
+                 ('Michael Wilson', 2900.25, '2023-10-20', 40),
+                 ('Laura Brown', 3000.75, '2023-10-21', 37),
+                 ('James Taylor', 3100.00, '2023-10-22', 41),
+                 ('Sarah Miller', 3200.50, '2023-10-23', 38),
+                 ('David Anderson', 3300.12, '2023-10-24', 40),
+                 ('Jennifer Lee', 3400.25, '2023-10-25', 42);
+
+
+          CREATE TABLE IF NOT EXISTS customers
+          (
+              id     SERIAL PRIMARY KEY,
+              name   VARCHAR(255),
+              username   VARCHAR(50) NOT NULL UNIQUE,
+              password   VARCHAR(255) NOT NULL
+              );
+
+          CREATE TABLE IF NOT EXISTS orders
+          (
+              id           SERIAL PRIMARY KEY,
+              order_date   TIMESTAMP,
+              order_complete_date   TIMESTAMP,
+              customer_id INT,
+              assembler_id INT,
+              FOREIGN KEY (customer_id) REFERENCES customers (id),
+              FOREIGN KEY (assembler_id) REFERENCES assemblers (id)
+              );
+
+          CREATE TABLE IF NOT EXISTS orders_components
+          (
+              order_id     INT,
+              component_id INT,
+              quantity     INT,
+              PRIMARY KEY (order_id, component_id),
+              FOREIGN KEY (order_id) REFERENCES orders (id),
+              FOREIGN KEY (component_id) REFERENCES components (id)
+              );
+      </sql>
+
+    </changeSet>
+
+</databaseChangeLog>

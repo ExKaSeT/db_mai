@@ -10,8 +10,8 @@ import java.sql.Date;
 @Data
 public class Assembler {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "assembler_seq")
-    @SequenceGenerator(name = "assembler_seq", sequenceName = "assembler_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "assembler_id_seq")
+    @SequenceGenerator(name = "assembler_id_seq", sequenceName = "assembler_id_seq", allocationSize = 1)
     private Long id;
 
     @Column
