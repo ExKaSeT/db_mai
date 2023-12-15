@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="header :: headerFragment">
+    <!-- Ваши дополнительные мета-теги и ссылки на стили могут быть добавлены здесь -->
+</head>
+<body>
+
+<div class="includeBaseBody" th:replace="header :: bodyFragment"></div>
+
+<div class="row mt-5">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body">
+                <img th:src="@{/static/public/img/assemblyPc.jpg}" class="img-fluid mb-3" alt="Computer Image"/>
+
+                <button id="assembleBtn" class="btn btn-primary">Собрать</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('assembleBtn').addEventListener('click', function () {
+        window.location.href = '/components';
+    });
+</script>
+
+</body>
+</html>

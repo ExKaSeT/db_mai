@@ -28,10 +28,10 @@
                         <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required/>
                         <small id="passwordMatchMessage"></small>
                     </div>
-                    <button type="submit" class="btn btn-primary">Register</button>
+                    <button type="submit" id="submitBtn" class="btn btn-primary invisible">Register</button>
                     <div th:if="${#fields.hasAnyErrors()}">
                         <ul>
-                            <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+                            <li th:each="err : ${#fields.allErrors()}" th:if="${not #strings.isEmpty(err)}" th:text="${err}" />
                         </ul>
                     </div>
                 </form>
@@ -48,17 +48,21 @@
         var passwordInput = document.getElementById('password');
         var confirmPasswordInput = document.getElementById('confirmPassword');
         var message = document.getElementById('passwordMatchMessage');
+        var button = document.getElementById('submitBtn');
 
         function checkPasswordMatch() {
             var password = passwordInput.value;
             var confirmPassword = confirmPasswordInput.value;
 
+
             if (password === confirmPassword) {
                 message.textContent = 'Passwords match';
                 message.style.color = 'green';
+                button.classList.remove('invisible');
             } else {
                 message.textContent = 'Passwords do not match';
                 message.style.color = 'red';
+                button.classList.add('invisible');
             }
         }
 

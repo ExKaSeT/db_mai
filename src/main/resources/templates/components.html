@@ -1,10 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Blyat</title>
+<head th:include="header :: headerFragment">
 </head>
 <body>
+
+<div class="includeBaseBody" th:replace="header :: bodyFragment"></div>
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>Components</h2>
+            </div>
+            <div class="card-body">
+                <!-- Форма поиска компонентов -->
+                <form th:action="@{/components}" method="get">
+                    <div class="form-group">
+                        <input type="text" id="searchKeyword" name="searchKeyword" class="form-control"
+                               th:value="${searchKeyword}" placeholder="Enter search keyword"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+
+                <!-- Таблица для отображения результатов поиска -->
+                <table class="table mt-3">
+                    <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Пример использования Thymeleaf для отображения списка компонентов -->
+                    <tr th:each="component : ${components}">
+                        <td th:text="${component.sku}"></td>
+                        <td th:text="${component.model}"></td>
+                        <td th:text="${component.quantity}"></td>
+                        <td th:text="${component.price}"></td>
+                        <td>
+                            <!-- Кнопка для добавления компонента в корзину -->
+                            <form th:action="@{/addToCart}" method="post">
+                                <input type="hidden" name="componentId" th:value="${component.id}" />
+                                <button type="submit" class="btn btn-success">Add to Cart</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

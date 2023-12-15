@@ -15,7 +15,7 @@ public class RegisterUsernameValidator implements ConstraintValidator<RegisterUs
     public boolean isValid(String username, ConstraintValidatorContext constraintValidatorContext) {
 
         if (customerRepository.findByUsername(username).isPresent()) {
-            constraintValidatorContext.buildConstraintViolationWithTemplate("User with username " + username + " already exists").addConstraintViolation();
+            constraintValidatorContext.buildConstraintViolationWithTemplate("User with username \"" + username + "\" already exists").addConstraintViolation();
             return false;
         }
 
