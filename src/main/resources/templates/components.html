@@ -10,27 +10,28 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h2>Components</h2>
+                <h2>Компоненты</h2>
             </div>
             <div class="card-body">
                 <!-- Форма поиска компонентов -->
                 <form th:action="@{/components}" method="get">
                     <div class="form-group">
                         <input type="text" id="searchKeyword" name="searchKeyword" class="form-control"
-                               th:value="${searchKeyword}" placeholder="Enter search keyword"/>
+                               th:value="${searchKeyword}" placeholder="Введите запрос"/>
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" class="btn btn-primary">Поиск</button>
                 </form>
 
                 <!-- Таблица для отображения результатов поиска -->
                 <table class="table mt-3">
                     <thead>
                     <tr>
-                        <th>SKU</th>
-                        <th>Model</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Action</th>
+                        <th>Код</th>
+                        <th>Модель</th>
+                        <th>Доступное кол-во</th>
+                        <th>Цена</th>
+                        <th></th>
+                        <th>Кол-во в корзине</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,14 +39,18 @@
                     <tr th:each="component : ${components}">
                         <td th:text="${component.sku}"></td>
                         <td th:text="${component.model}"></td>
-                        <td th:text="${component.quantity}"></td>
+                        <td th:text="${component.quantity}" th:id="'maxQuantity_' + ${component.id}"></td>
                         <td th:text="${component.price}"></td>
                         <td>
-                            <!-- Кнопка для добавления компонента в корзину -->
-                            <form th:action="@{/addToCart}" method="post">
-                                <input type="hidden" name="componentId" th:value="${component.id}" />
-                                <button type="submit" class="btn btn-success">Add to Cart</button>
-                            </form>
+                            <!-- Кнопки для добавления/удаления компонента с использованием AJAX -->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary" th:onclick="'updateQuantity(\'DEC\', ' + ${component.id} + ') '">-</button>
+                                <button type="button" class="btn btn-secondary" th:onclick="'updateQuantity(\'INC\', ' + ${component.id} + ') '">+</button>
+                            </div>
+                        </td>
+                        <td>
+                            <span th:id="'cartQuantity_' + ${component.id}" th:if="${cart[component.id] != null}" th:text="${(cart[component.id]).quantity}"></span>
+                            <span th:id="'cartQuantity_' + ${component.id}" th:if="${cart[component.id] == null}">0</span>
                         </td>
                     </tr>
                     </tbody>
@@ -54,6 +59,28 @@
         </div>
     </div>
 </div>
+
+<script>
+    function updateQuantity(action, componentId) {
+        var currentQuantity = parseInt($('#cartQuantity_' + componentId).text());
+        var maxQuantity = parseInt($('#maxQuantity_' + componentId).text());
+
+        if (action === 'INC' && currentQuantity >= maxQuantity) {return;}
+
+        $.ajax({
+            type: 'POST',
+            url: '/components/updateQuantity',
+            data: { action: action, componentId: componentId },
+            success: function(response) {
+                // Обновление количества в корзине на странице
+                $('#cartQuantity_' + componentId).text(response);
+            },
+            error: function(error) {
+                console.log('Error:', error);
+            }
+        });
+    }
+</script>
 
 </body>
 </html>
