@@ -7,10 +7,10 @@ import lombok.Data;
 
 @Data
 public class RegisterDto {
-    @NotNull
-    @Pattern(regexp = "^[a-zA-Z]+$", message = "Username should contain only Latin letters")
+    @NotNull(message = "Логин не может отсутствовать")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "В логине можно использовать только латинские символы")
     @RegisterUsernameConstraint
     private String username;
-    @NotNull
+    @NotNull(message = "Пароль не может отсутствовать")
     private String password;
 }

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="header :: headerFragment">
+</head>
+<body>
+
+<div class="includeBaseBody" th:replace="header :: bodyFragment"></div>
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>Корзина</h2>
+            </div>
+            <div class="card-body">
+
+                <table class="table mt-3" id="cartTable">
+                    <thead>
+                    <tr>
+                        <th>Код</th>
+                        <th>Модель</th>
+                        <th>Доступное кол-во</th>
+                        <th>Цена</th>
+                        <th></th>
+                        <th>Кол-во в корзине</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="component : ${components}">
+                        <td th:text="${component.sku}"></td>
+                        <td th:text="${component.model}"></td>
+                        <td th:text="${component.quantity}" th:id="'maxQuantity_' + ${component.id}"></td>
+                        <td th:text="${component.price}"></td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary"
+                                        th:onclick="'updateQuantity(\'DEC\', ' + ${component.id} + ') '">-
+                                </button>
+                                <button type="button" class="btn btn-secondary"
+                                        th:onclick="'updateQuantity(\'INC\', ' + ${component.id} + ') '">+
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <span th:id="'cartQuantity_' + ${component.id}" th:if="${cart[component.id] != null}"
+                                  th:text="${(cart[component.id]).quantity}"></span>
+                            <span th:id="'cartQuantity_' + ${component.id}"
+                                  th:if="${cart[component.id] == null}">0</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="mt-3">
+                    <strong>Общая стоимость:</strong>
+                    <span id="totalPrice">0.00</span>
+                </div>
+
+                <form action="/cart" method="post">
+                    <button type="button" class="btn btn-primary mt-3">Оформить заказ</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = updateTotalPrice;
+
+    function updateTotalPrice() {
+        let totalCost = 0;
+
+        let rows = document.getElementById("cartTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+        for (let i = 0; i < rows.length; i++) {
+            let cost = parseFloat(rows[i].getElementsByTagName("td")[3].innerText);
+            let quantity = parseInt(rows[i].getElementsByTagName("span")[0].innerText);
+
+            totalCost += cost * quantity;
+        }
+
+        $('#totalPrice').text(totalCost);
+    }
+
+    function updateQuantity(action, componentId) {
+        var currentQuantity = parseInt($('#cartQuantity_' + componentId).text());
+        var maxQuantity = parseInt($('#maxQuantity_' + componentId).text());
+
+        if (action === 'INC' && currentQuantity >= maxQuantity) {
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/components/updateQuantity',
+            data: {action: action, componentId: componentId},
+            success: function (response) {
+                $('#cartQuantity_' + componentId).text(response);
+                updateTotalPrice();
+            },
+            error: function (error) {
+                console.log('Error:', error);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="header :: headerFragment">
+</head>
+<body>
+
+<div class="includeBaseBody" th:replace="header :: bodyFragment"></div>
+
+<div class="row mt-5">
+  <div class="col-md-6 offset-md-3">
+    <div class="card">
+      <div class="card-header">
+        <h2>Мои данные</h2>
+      </div>
+      <div class="card-body">
+        <form th:action="@{/me}" method="post" th:object="${customerInfoDto}">
+          <div class="form-group">
+            <label for="name">Имя:</label>
+            <input type="text" id="name" name="name" class="form-control" th:field="*{name}" th:value="${customerInfoDto.name}" />
+          </div>
+          <div th:if="${#fields.hasAnyErrors()}">
+            <ul>
+              <li th:each="err : ${#fields.allErrors()}" th:if="${not #strings.isEmpty(err)}" th:text="${err}"></li>
+            </ul>
+          </div>
+          <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

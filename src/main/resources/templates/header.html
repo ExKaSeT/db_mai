@@ -5,18 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>PC Assembly</title>
 
-    <!-- Bootstrap CSS (локальная копия) -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           crossorigin="anonymous">
-
-    <!-- Дополнительные стили -->
     <style>
-        /* Ваши дополнительные стили могут быть добавлены здесь */
     </style>
 </head>
 <body th:fragment="bodyFragment">
 
-<!-- Навигационный хедер с кнопкой "Корзина" и "Профиль" -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">PC Assembly</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -25,6 +20,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/components">Поиск</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/cart">Корзина</a>
             </li>
@@ -35,7 +33,6 @@
     </div>
 </nav>
 
-<!-- Bootstrap JS и зависимости (локальные копии, порядок важен) -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"

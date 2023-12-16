@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="header :: headerFragment">
+</head>
+<body>
+
+<div class="includeBaseBody" th:replace="header :: bodyFragment"></div>
+
+<div class="row mt-5">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h2 th:text="${customerInfoDto.name} == '' ? 'Профиль' : ${customerInfoDto.name}">Профиль</h2>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="/me">Мои данные</a></li>
+                    <li class="list-group-item"><a href="/orders">Заказы</a></li>
+                    <li class="list-group-item"><a href="/logout">Выйти</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

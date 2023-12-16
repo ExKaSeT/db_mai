@@ -18,6 +18,7 @@ public class AuthService {
         var user = new Customer();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
+        user.setName("Аноним");
         customerRepository.save(user);
     }
 }

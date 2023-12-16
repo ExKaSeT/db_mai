@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.List;
+
 
 @Controller
 @RequestMapping("/components")
@@ -25,7 +25,7 @@ public class ComponentController {
     private final Cart cart;
 
     @GetMapping
-    public String showComponentsPage(@RequestParam(name = "searchKeyword", required = false) String searchKeyword,
+    public String getComponentsPage(@RequestParam(name = "searchKeyword", required = false) String searchKeyword,
                                      Model model) {
         List<Component> components = componentService.search(searchKeyword);
         model.addAttribute("components", components);
@@ -34,27 +34,23 @@ public class ComponentController {
         return "components";
     }
 
-//    @PostMapping("/addToCart")
-//    public String addToCart(@RequestParam("componentId") Long componentId) {
-//        var item = cart.getOrDefault(componentId, new ProductCount(componentId, 0));
-//        item.setQuantity(item.getQuantity() + 1);
-//        return "redirect:/components";
-//    }
-
     @PostMapping("/updateQuantity")
     public ResponseEntity<Integer> updateQuantity(@RequestParam("action") String action,
                                          @RequestParam("componentId") Long componentId) {
         var item = cart.getOrDefault(componentId, new ProductCount(componentId, 0));
         if ("INC".equals(action)) {
             item.setQuantity(item.getQuantity() + 1);
+            cart.put(item.getItemId(), item);
         } else if ("DEC".equals(action)) {
             int quantity = item.getQuantity() - 1;
-            if (quantity < 0) {
-                quantity = 0;
+            if (quantity <= 0) {
+                item.setQuantity(0);
+                cart.remove(item.getItemId());
+            } else {
+                item.setQuantity(quantity);
+                cart.put(item.getItemId(), item);
             }
-            item.setQuantity(quantity);
         }
-        cart.put(item.getItemId(), item);
 
         return new ResponseEntity<>(item.getQuantity(), HttpStatus.OK);
     }
