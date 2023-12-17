@@ -7,13 +7,9 @@ import lombok.Data;
 @Table(name = "orders_components")
 @Data
 public class ComponentOrder {
-    @Id
-    @Column(name = "order_id")
-    private Long orderId;
 
-    @Id
-    @Column(name = "component_id")
-    private Long componentId;
+    @EmbeddedId
+    private ComponentOrderId componentOrderId;
 
     @Column
     private Integer quantity;

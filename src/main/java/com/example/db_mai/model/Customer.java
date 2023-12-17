@@ -2,6 +2,10 @@ package com.example.db_mai.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -20,4 +24,9 @@ public class Customer {
 
     @Column
     private String password;
+
+    @OneToMany(mappedBy = "customer", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Order> orders;
 }

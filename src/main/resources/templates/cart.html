@@ -56,9 +56,15 @@
                     <span id="totalPrice">0.00</span>
                 </div>
 
-                <form action="/cart" method="post">
-                    <button type="button" class="btn btn-primary mt-3">Оформить заказ</button>
+                <form th:action="@{/cart}" method="post" th:object="${cart}">
+                    <button type="submit" class="btn btn-primary mt-3">Оформить заказ</button>
                 </form>
+
+                <div th:if="${errors != null}">
+                    <ul>
+                        <li th:each="err : ${errors}" th:if="${not #strings.isEmpty(err)}" th:text="${err}" style="color: red"></li>
+                    </ul>
+                </div>
 
             </div>
         </div>

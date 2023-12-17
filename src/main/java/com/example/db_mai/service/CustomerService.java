@@ -18,4 +18,8 @@ public class CustomerService {
         user.setName(name);
         return customerRepository.save(user);
     }
+
+    public Customer get(Long customerId) {
+        return customerRepository.findById(customerId).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+    }
 }

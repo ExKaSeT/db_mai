@@ -1,12 +1,19 @@
 package com.example.db_mai.controller;
 
 import com.example.db_mai.model.Component;
+import com.example.db_mai.security.UserInfoDetails;
 import com.example.db_mai.service.ComponentService;
+import com.example.db_mai.service.OrderService;
 import com.example.db_mai.util.Cart;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
@@ -17,6 +24,7 @@ public class CartController {
 
     private final ComponentService componentService;
     private final Cart cart;
+    private final OrderService orderService;
 
     @GetMapping
     String getPage(Model model) {
@@ -26,4 +34,13 @@ public class CartController {
         return "cart";
     }
 
+    @PostMapping
+    String createOrder(Model model, @AuthenticationPrincipal UserInfoDetails user) {
+        if (cart.isEmpty()) {
+            model.addAttribute("errors", List.of("Корзина пуста"));
+            return "cart";
+        }
+        var order = orderService.create(user.getCustomer().getId(), cart);
+        return "redirect:/order/" + order.getId();
+    }
 }
