@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="header :: headerFragment">
+</head>
+<body>
+
+<div class="includeBaseBody" th:replace="header :: bodyFragment"></div>
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>Заказы</h2>
+            </div>
+            <div class="card-body">
+                <!-- Проверка, есть ли заказы -->
+                <div th:if="${not #lists.isEmpty(orders)}">
+                    <!-- Таблица для отображения заказов -->
+                    <table class="table mt-3">
+                        <thead>
+                        <tr>
+                            <th>Номер заказа</th>
+                            <th>Дата заказа</th>
+                            <th>Статус</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.id}"></td>
+                            <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td>
+                                <!-- Проверка статуса заказа и вывод соответствующего текста -->
+                                <span th:if="${order.orderCompleteDate == null}">Выполняется</span>
+                                <span th:if="${order.orderCompleteDate != null}">Завершен</span>
+                            </td>
+                            <td>
+                                <!-- Ссылка на подробную информацию о заказе -->
+                                <a th:href="@{'/orders/' + ${order.id}}">Подробнее</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${#lists.isEmpty(orders)}">
+                    <p>У вас нет заказов.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

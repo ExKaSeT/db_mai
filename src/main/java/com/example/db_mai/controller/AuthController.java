@@ -18,12 +18,12 @@ public class AuthController {
     private final AuthService authService;
 
     @GetMapping("/login")
-    String getLoginPage() {
+    public String getLoginPage() {
         return "login";
     }
 
     @GetMapping("/register")
-    String getRegisterPage(Model model) {
+    public String getRegisterPage(Model model) {
         model.addAttribute("registerDto", new RegisterDto());
         return "register";
     }

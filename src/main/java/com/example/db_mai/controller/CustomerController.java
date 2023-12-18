@@ -20,13 +20,13 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping("/profile")
-    String getProfilePage(Model model, @AuthenticationPrincipal UserInfoDetails user) {
+    public String getProfilePage(Model model, @AuthenticationPrincipal UserInfoDetails user) {
         model.addAttribute("customerInfoDto", new CustomerInfoDto(user.getCustomer().getName()));
         return "profile";
     }
 
     @GetMapping("/me")
-    String getInfoPage(Model model, @AuthenticationPrincipal UserInfoDetails user) {
+    public String getInfoPage(Model model, @AuthenticationPrincipal UserInfoDetails user) {
         model.addAttribute("customerInfoDto", new CustomerInfoDto(user.getCustomer().getName()));
         return "me";
     }

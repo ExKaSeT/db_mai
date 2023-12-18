@@ -5,11 +5,16 @@ import lombok.Data;
 
 @Entity
 @Table(name = "orders_components")
+@IdClass(ComponentOrderId.class)
 @Data
 public class ComponentOrder {
+    @Id
+    @Column(name = "order_id")
+    private Long orderId;
 
-    @EmbeddedId
-    private ComponentOrderId componentOrderId;
+    @Id
+    @Column(name = "component_id")
+    private Long componentId;
 
     @Column
     private Integer quantity;
